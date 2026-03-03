@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: main.py with Args",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--sqliteidbm", "example.idbm",
+                "--output", "example.inp",
+                "--regenschreiber", "examples/RegenschreiberZuordnung.csv",
+                "--log", "conversion.log",
+                "--dump-csv", "dump_folder",
+                "--spatialite-dll", "mod_spatialite.dll",
+                "--force"
+            ]
+        }
+    ]
+}
