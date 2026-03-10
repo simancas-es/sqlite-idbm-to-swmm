@@ -1,9 +1,15 @@
 About: creating an .exe:
 python -m pip install pyinstaller
-pyinstaller src/main.py
-pyinstaller -F src/main.py
+python -m pip install -r requirements.txt
+Then:
+pyinstaller src/main.py -p src/
+pyinstaller -F src/main.py -p src/
+Or:
+python -m PyInstaller src/main.py -p src/
+python -m PyInstaller -F src/main.py -p src/
 
-About: qqlite Spatialite extension:
+
+About: sqlite Spatialite extension:
 Sqlite must have been compiled with the possibility of enabling extensions.
 
 
