@@ -4,6 +4,7 @@ Improvised intermediary items for the conversion of objects into swmm
 """
 
 from dataclasses import dataclass, field
+import logging
 
 
 @dataclass(kw_only=True)
@@ -282,8 +283,7 @@ class XSECTIONS(SWMMConfigObject):
             if profiltyp == "3": return "EGG"
             if profiltyp == "68": return "CUSTOM"
             else:
-                # raise ValueError(f"PROFILE {profiltyp} NOT IMPLEMENTED")
-                print(f"PROFILE {profiltyp} NOT IMPLEMENTED")
+                logging.error(f"Profiltyp {profiltyp} not implemented yet! Created as circular!!")
                 return "CIRCULAR"
         
 

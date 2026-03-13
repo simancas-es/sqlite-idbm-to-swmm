@@ -198,7 +198,5 @@ def main():
         logging.info(f"Dumping SQLite tables from {args.sqliteidbm} into folder {args.dump_csv}")
         sqlite_dump(sqlite_path=str(args.sqliteidbm), export_folder=str(args.dump_csv), spatialite_dll_path=str(args.spatialite_dll))
         logging.info("SQLite tables dumped successfully")
-
-
 if __name__ == "__main__":
     main()

@@ -408,7 +408,9 @@ class SQLitetoSWMM:
             typ = str(serie["Typ"])
 
             #TODO HACK: for now we will assume that all pumps are Schaltung
-            if typ != "2": raise ValueError("Pumpe: Pumpetyp not implemented yet!!")
+            if typ != "2":
+                logging.error(f"Pumpe: {name} Pumpetyp {typ} not implemented yet!!")
+                continue
             
             #These Values are shared for all subpumps
             SchachtOben = serie["SchachtOben"]
@@ -481,31 +483,38 @@ class SQLitetoSWMM:
             #Each Area is independent from the others
             name = serie["Name"]
 
-            #Regenschreiber. Does this subcatchment even exist?
-            regenschreiber : int = serie["Regenschreiber"]
-            if individual_regenschreiber is not None:
-                regenschreiber = individual_regenschreiber(serie)
-            if regenschreiber is None:
-                logging.info(f"Flaeche: {name} has no Regenschreiber and is discarded...")
-                continue
-
-            area_ha = serie["Groesse"]
-            neigungsklasse = serie["Neigungsklasse"]
-            slope = self.convert_pct_neigung(neigungsklasse) # of 100
-
-            geometry = serie[self.GEOMETRY_FIELD]#Missing
-            if geometry is not None: raise ValueError(f"Flaeche: {name} -> Geometry for this not implemented yet!! Check your tables")
-
-
-            #Find the Parameters:
-            parameter_id = serie["ParametersatzRef"]                
-            parameter_row = df_param.query("Id == @parameter_id").iloc[0,:]
 
             #Find the Schacht upstream of the Rohr
             haltungref = serie["HaltungRef"]
             if math.isnan(haltungref): 
                 logging.info(f"Flaeche: {name} has no HaltungRef and is discarded...")
                 continue
+
+            
+            #Regenschreiber. Does this subcatchment even exist?
+            regenschreiber : int = serie["Regenschreiber"]
+            if individual_regenschreiber is not None:
+                regenschreiber = individual_regenschreiber(serie)
+            if regenschreiber is None:
+                logging.info(f"Flaeche: {name} has no registered Regenschreiber... It will still be created with an unsafe Raingauge ID: UNDETERMINED_RAINGAGE_ID")
+                regenschreiber = "UNDETERMINED_RAINGAGE_ID"
+                # continue
+
+            area_ha = serie["Groesse"]
+            neigungsklasse = serie["Neigungsklasse"]
+            slope = self.convert_pct_neigung(neigungsklasse) # of 100
+
+            geometry = serie[self.GEOMETRY_FIELD]#Missing
+            if geometry is not None:
+                # raise ValueError(f"Flaeche: {name} -> Geometry for this not implemented yet!! Check your tables")
+                logging.info(f"Flaeche: {name} has some geometry {geometry} but we are ignoring it...")
+
+
+            #Find the Parameters:
+            parameter_id = serie["ParametersatzRef"]                
+            parameter_row = df_param.query("Id == @parameter_id").iloc[0,:]
+
+            
             rohr = df_rohr.query("Id == @haltungref").iloc[0,:]
 
             ref_node = rohr["SchachtObenRef"] #This is actually a dataframe or a series depending on what happens

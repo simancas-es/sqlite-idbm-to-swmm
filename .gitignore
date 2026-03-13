@@ -1,2 +1,4 @@
 /build
 /dist
+/dump_folder
+/src/__pycache__
