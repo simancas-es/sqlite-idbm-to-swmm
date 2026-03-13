@@ -11,6 +11,7 @@ python -m PyInstaller -F src/main.py -p src/
 
 About: sqlite Spatialite extension:
 Sqlite must have been compiled with the possibility of enabling extensions.
+NOTE: if for some reason this .dll doesn't work, try downloading it from the original website. (See --license)
 
 
 About: /utils:
